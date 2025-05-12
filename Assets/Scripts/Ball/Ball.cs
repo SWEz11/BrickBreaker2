@@ -19,15 +19,15 @@ public class Ball : MonoBehaviour
             {
                 gameManager.GameOver();
             }
-            else
-            {
-                gameManager.ball.transform.position = new Vector3(0,0,0);
-            }
                 break;
             case "Box":
             gameManager.scoreInt++;
-            gameManager.UpdateUI();
-            other.gameObject.SetActive(false);
+            Destroy(other.gameObject);
+            gameManager.ballCount--;
+            if(gameManager.ballCount == 0 )
+            {
+                gameManager.Victory();
+            }
                 break;
         }
     }

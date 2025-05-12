@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEditor.SearchService;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {   
     [SerializeField] GameObject gameOverText;
+    [SerializeField] GameObject victoryText;
     public GameObject ball;
     [SerializeField] PaddleController paddleController;
     [SerializeField] TMP_Text scoreText;
@@ -14,12 +16,21 @@ public class GameManager : MonoBehaviour
     public int dropInt;
     public int scoreInt;
     public int highScoreInt;
+    public int ballCount;
     [SerializeField] AudioSource gameOverSoundEffect;
+    [SerializeField] AudioSource victorySoundEffect;
 
     void Start()
     {
+        ballCount = 5;
         Load();
+        print(highScoreInt);
     }
+    void Update()
+    {
+        UpdateUI();
+    }
+
     //GameOver
     public void GameOver()
     {
@@ -34,8 +45,23 @@ public class GameManager : MonoBehaviour
         {
             highScoreInt = scoreInt;
         }
+        highScoreText.text = "High Score: " + highScoreInt.ToString();
         Save();
-        
+    }
+
+    public void Victory()
+    {
+        victoryText.SetActive(true);
+        gameOverSoundEffect.Play();
+        ball.SetActive(false);
+        ball.transform.position = new Vector3(0,0,0);
+        paddleController.canMove = false;
+        //Check for HighScore
+        if(scoreInt > highScoreInt)
+        {
+           highScoreInt = scoreInt;
+        }
+        Save();
     }
 
     //PlayAgain
@@ -46,8 +72,9 @@ public class GameManager : MonoBehaviour
 
     public void UpdateUI()
     {
-        scoreText.text = "Score " + scoreInt.ToString();
-        dropText.text = "Drop: " + dropInt.ToString();
+        scoreText.text = "Score: " + scoreInt.ToString();
+        dropText.text = "Drop Left: " + dropInt.ToString();
+        Save();
     }
 
     void Save()
