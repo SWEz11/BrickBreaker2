@@ -31,6 +31,5 @@ public class Ball : MonoBehaviour
                 break;
         }
     }
-    //labas
     
 }
